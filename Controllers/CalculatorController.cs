@@ -6,32 +6,61 @@ namespace CalculatorService.Controllers;
 [Route("[controller]")]
 public class CalculatorController : ControllerBase
 {
-    [HttpGet("add/{a}/{b}")]
-    public IActionResult Add(int a, int b)
+    private readonly ILogger<CalculatorController> _logger;
+
+    public CalculatorController(ILogger<CalculatorController> logger)
     {
-        return Ok(a + b);
+        _logger = logger;
     }
 
-    [HttpGet("subtract/{a}/{b}")]
-    public IActionResult Subtract(int a, int b)
+    [HttpGet("{operation}")]
+    public IActionResult Calculate(string operation, [FromQuery] Dictionary<string, string> parameters)
     {
-        return Ok(a - b);
-    }
-
-    [HttpGet("multiply/{a}/{b}")]
-    public IActionResult Multiply(int a, int b)
-    {
-        return Ok(a * b);
-    }
-
-    [HttpGet("divide/{a}/{b}")]
-    public IActionResult Divide(int a, int b)
-    {
-        if (b == 0)
+        try
         {
-            return BadRequest("Cannot divide by zero.");
-        }
+            var calculator = GetCalculator(operation);
 
-        return Ok(a / b);
+            if (calculator == null)
+            {
+                return BadRequest($"Invalid operation '{operation}'.");
+            }
+
+            var validationErrors = calculator.Validate(parameters);
+
+            if (validationErrors.Any())
+            {
+                return BadRequest(validationErrors);
+            }
+
+            var result = calculator.Calculate(parameters);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while performing a calculation.");
+            return StatusCode(500, "An error occurred while performing the calculation.");
+        }
+    }
+
+    private ICalculator GetCalculator(string operation)
+    {
+        switch (operation)
+        {
+            case "add":
+                return new AddCalculator();
+            case "subtract":
+                return new SubtractCalculator();
+            case "multiply":
+                return new MultiplyCalculator();
+            case "divide":
+                return new DivideCalculator();
+            case "power":
+                return new PowerCalculator();
+            case "root":
+                return new RootCalculator();
+            default:
+                return null;
+        }
     }
 }

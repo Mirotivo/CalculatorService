@@ -14,15 +14,15 @@ Once you have installed the .NET Core SDK, follow these steps:
 ```dotnet run```
 4. Once the application is running, you can send HTTP GET requests to the appropriate endpoints to perform arithmetic operations.
  
-For example, to add two numbers, you can send a request to http://92.205.162.126:8050/calculator/add/5/3 and expect to receive a response with the value 8.
+For example, to add two numbers, you can send a request to http://92.205.162.126:8050/calculator/add?a=5&b=3 and expect to receive a response with the value 8.
 
 # Endpoints
 The following endpoints are available in the CalculatorService API:
 
-```GET /api/Calculator/add/{a}/{b}``` - Adds two numbers and returns the result.  
-```GET /api/Calculator/subtract/{a}/{b}``` - Subtracts two numbers and returns the result.  
-```GET /api/Calculator/multiply/{a}/{b}``` - Multiplies two numbers and returns the result.  
-```GET /api/Calculator/divide/{a}/{b}``` - Divides two numbers and returns the result. Returns a 400 Bad Request response if the second number is zero.
+```GET /calculator/add?a={a}&b={b}``` - Adds two numbers and returns the result.  
+```GET /calculator/subtract?a={a}&b={b}``` - Subtracts two numbers and returns the result.  
+```GET /calculator/multiply?a={a}&b={b}``` - Multiplies two numbers and returns the result.  
+```GET /calculator/divide?a={a}&b={b}``` - Divides two numbers and returns the result. Returns a 400 Bad Request response if the second number is zero.
 
 # License
 CalculatorService is released under the MIT License. See LICENSE for details.
