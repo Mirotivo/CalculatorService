@@ -2,7 +2,7 @@ public class PowerCalculator : CalculatorBase
 {
     public override string Name => "Power";
 
-    public override object Calculate(Dictionary<string, string> parameters)
+    public override double Calculate(Dictionary<string, string> parameters)
     {
         var a = int.Parse(parameters["a"]);
 

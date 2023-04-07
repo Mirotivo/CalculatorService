@@ -2,7 +2,7 @@ public class AddCalculator : CalculatorBase
 {
     public override string Name => "Add";
 
-    public override object Calculate(Dictionary<string, string> parameters)
+    public override double Calculate(Dictionary<string, string> parameters)
     {
         var a = int.Parse(parameters["a"]);
         var b = int.Parse(parameters["b"]);

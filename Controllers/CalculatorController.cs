@@ -1,4 +1,9 @@
+using System.ComponentModel;
+using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Runtime.Serialization;
 
 namespace CalculatorService.Controllers;
 
@@ -14,7 +19,10 @@ public class CalculatorController : ControllerBase
     }
 
     [HttpGet("{operation}")]
-    public IActionResult Calculate(string operation, [FromQuery] Dictionary<string, string> parameters)
+    public IActionResult Calculate(
+        [FromRoute, DefaultValue("add")] string operation,
+        [FromQuery, DefaultValue("5")] int? a = null,
+        [FromQuery, DefaultValue("3")] int? b = null)
     {
         try
         {
@@ -25,6 +33,16 @@ public class CalculatorController : ControllerBase
                 return BadRequest($"Invalid operation '{operation}'.");
             }
 
+            // Create a new dictionary with default values
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            if (a.HasValue)
+            {
+                parameters["a"] = a.Value.ToString();
+            }
+            if (b.HasValue)
+            {
+                parameters["b"] = b.Value.ToString();
+            }
             var validationErrors = calculator.Validate(parameters);
 
             if (validationErrors.Any())
