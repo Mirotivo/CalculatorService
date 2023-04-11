@@ -10,11 +10,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseRouting();
 
@@ -27,7 +24,9 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapGet("/", async context =>
     {
-        await context.Response.WriteAsync("Welcome to the calculator page!");
+        context.Response.Redirect("/swagger");
+        await Task.CompletedTask;
+        // await context.Response.WriteAsync("Welcome to the calculator page!");
     });
 });
 
